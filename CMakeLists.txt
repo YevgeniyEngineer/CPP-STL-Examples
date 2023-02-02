@@ -16,3 +16,5 @@ target_link_libraries(vector_benchmarks_simple TBB::tbb)
 # "vector_benchmarks_complex" executable
 add_executable(vector_benchmarks_complex src/vector_benchmarks_complex.cpp)
 target_link_libraries(vector_benchmarks_complex TBB::tbb)
+
+add_executable(threaded_task_queue src/threaded_task_queue.cpp)
