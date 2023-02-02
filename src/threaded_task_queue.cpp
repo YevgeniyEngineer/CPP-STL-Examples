@@ -12,6 +12,8 @@
 
 using namespace std::chrono_literals;
 
+#define PRINT_DEBUG_INFO 0
+
 namespace
 {
 std::atomic<bool> stop_status = false;
@@ -26,7 +28,7 @@ void signalHandler(int signum)
 class TaskDispatchQueue
 {
   public:
-    TaskDispatchQueue(unsigned int num_threads = std::thread::hardware_concurrency())
+    explicit TaskDispatchQueue(unsigned int num_threads = std::thread::hardware_concurrency())
     {
         for (unsigned int thread_no = 0; thread_no < num_threads; ++thread_no)
         {
@@ -45,7 +47,9 @@ class TaskDispatchQueue
                         task = std::move(tasks_.front());
                         tasks_.pop();
 
+#ifndef PRINT_DEBUG_INFO
                         std::cout << "Thread " << std::this_thread::get_id() << " received task\n";
+#endif
                     }
                     task();
                 }
@@ -53,7 +57,7 @@ class TaskDispatchQueue
         }
     };
 
-    virtual ~TaskDispatchQueue()
+    ~TaskDispatchQueue()
     {
         {
             std::unique_lock<std::mutex> lock(mutex_);
@@ -106,10 +110,13 @@ int main()
 
     TaskDispatchQueue task_queue{};
 
-    for (int task_no = 0; task_no < 10000000; task_no++)
+    std::chrono::time_point<std::chrono::high_resolution_clock> start_time = std::chrono::high_resolution_clock::now();
+    for (int task_no = 0; task_no < 10'000'000; task_no++)
     {
         task_queue.enqueue(task, task_no);
     }
+    std::chrono::time_point<std::chrono::high_resolution_clock> stop_time = std::chrono::high_resolution_clock::now();
+    std::cout << "Elapsed time: " << (stop_time - start_time).count() / 1e9 << " seconds " << std::endl;
 
     return EXIT_SUCCESS;
 }
