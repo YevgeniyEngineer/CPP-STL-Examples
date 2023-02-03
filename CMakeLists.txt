@@ -20,3 +20,4 @@ target_link_libraries(vector_benchmarks_complex TBB::tbb)
 add_executable(threaded_task_queue src/threaded_task_queue.cpp)
 
 add_executable(detached_threads src/detached_threads.cpp)
+add_executable(thread_safe_queue src/thread_safe_queue.cpp)
