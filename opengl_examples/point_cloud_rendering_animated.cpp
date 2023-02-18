@@ -106,6 +106,13 @@ void resize(int width, int height)
 
 int main(int argc, char **argv)
 {
+    // In the updated renderScene function, we first calculate the time since the last frame using the std::chrono
+    // library. We then generate a new point cloud and update its position using the updatePointCloud function. After
+    // rendering the point cloud, we call glutSwapBuffers to swap the front and back buffers, and glutPostRedisplay to
+    // request a redraw of the window. We also update the last_time variable to the current time for use in the next
+    // frame. In the resize function, we set the viewport and the projection matrix to ensure that the scene is
+    // displayed correctly after the window is resized.
+
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
     glutInitWindowSize(640, 480);
