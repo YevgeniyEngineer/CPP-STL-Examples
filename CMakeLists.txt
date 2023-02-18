@@ -23,3 +23,4 @@ add_executable(detached_threads src/detached_threads.cpp)
 add_executable(thread_safe_queue src/thread_safe_queue.cpp)
 
 add_executable(producer_consumer src/producer_consumer.cpp)
+add_executable(multi_producer_multi_consumer src/multi_producer_multi_consumer.cpp)
