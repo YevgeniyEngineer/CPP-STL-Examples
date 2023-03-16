@@ -36,6 +36,10 @@ template <typename T, std::size_t N> class StackVector
     {
         return N;
     }
+    void clear()
+    {
+        size_ = 0UL;
+    }
     void push_back(const T &value)
     {
         if (size_ >= N)
