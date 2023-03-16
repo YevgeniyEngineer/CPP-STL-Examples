@@ -24,19 +24,19 @@ template <typename T, std::size_t N> class StackVector
 
     StackVector() : size_(0){};
 
-    bool empty() const
+    bool empty() const noexcept
     {
         return (size_ == 0UL);
     }
-    size_type size() const
+    size_type size() const noexcept
     {
         return size_;
     }
-    size_type max_size() const
+    size_type max_size() const noexcept
     {
         return N;
     }
-    void clear()
+    void clear() noexcept
     {
         size_ = 0UL;
     }
@@ -106,11 +106,11 @@ template <typename T, std::size_t N> class StackVector
 
         return pos;
     }
-    reference operator[](size_type index)
+    reference operator[](size_type index) noexcept
     {
         return data_[index];
     }
-    const_reference operator[](size_type index) const
+    const_reference operator[](size_type index) const noexcept
     {
         return data_[index];
     }
@@ -138,19 +138,19 @@ template <typename T, std::size_t N> class StackVector
     {
         return data_.data() + size_;
     }
-    reverse_iterator rbegin()
+    reverse_iterator rbegin() noexcept
     {
         return reverse_iterator(end());
     }
-    const_reverse_iterator rbegin() const
+    const_reverse_iterator crbegin() const noexcept
     {
         return const_reverse_iterator(end());
     }
-    reverse_iterator rend()
+    reverse_iterator rend() noexcept
     {
         return reverse_iterator(begin());
     }
-    const_reverse_iterator rend() const
+    const_reverse_iterator crend() const noexcept
     {
         return const_reverse_iterator(begin());
     }
