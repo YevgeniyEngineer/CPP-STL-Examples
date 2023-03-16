@@ -4,7 +4,7 @@
 #include <cstdint>          // std::size_t
 #include <initializer_list> // std::initializer_list
 #include <iostream>         // std::cout
-#include <iterator>         // std::reverse_iterator
+#include <iterator>         // std::reverse_iterator, std::distance
 #include <stdexcept>        // std::overflow_error, std::underflow_error
 #include <string_view>      // std::swap
 #include <utility>          // std::move
@@ -154,6 +154,31 @@ template <typename T, std::size_t N> class StackVector final
         ++size_;
 
         return pos;
+    }
+    iterator erase(iterator pos)
+    {
+        if (pos < begin() || pos >= end())
+        {
+            throw std::out_of_range("Invalid iterator position");
+        }
+
+        iterator next = pos + 1;
+        std::move(next, end(), pos);
+        --size_;
+
+        return pos;
+    }
+    iterator erase(iterator first, iterator last)
+    {
+        if (first < begin() || first > last || last > end())
+        {
+            throw std::out_of_range("Invalid iterator range");
+        }
+
+        iterator new_end = std::move(last, end(), first);
+        size_ -= std::distance(first, last);
+
+        return first;
     }
     reference operator[](size_type index) noexcept
     {
