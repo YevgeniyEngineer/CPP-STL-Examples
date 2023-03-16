@@ -17,6 +17,8 @@ add_executable(threaded_task_queue threaded_task_queue.cpp)
 
 add_executable(detached_threads detached_threads.cpp)
 add_executable(thread_safe_queue thread_safe_queue.cpp)
+add_executable(work_stealing_queue work_stealing_queue.cpp)
+target_link_libraries(work_stealing_queue TBB::tbb)
 
 add_executable(producer_consumer producer_consumer.cpp)
 add_executable(multi_producer_multi_consumer multi_producer_multi_consumer.cpp)

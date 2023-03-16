@@ -12,7 +12,7 @@
 
 using namespace std::chrono_literals;
 
-#define PRINT_DEBUG_INFO 1
+#define PRINT_DEBUG_INFO 0
 
 namespace
 {
@@ -111,7 +111,7 @@ int main()
     TaskDispatchQueue task_queue{};
 
     std::chrono::time_point<std::chrono::high_resolution_clock> start_time = std::chrono::high_resolution_clock::now();
-    for (int task_no = 0; task_no < 10'000; task_no++)
+    for (int task_no = 0; task_no < 1'000'000; task_no++)
     {
         task_queue.enqueue(task, task_no);
     }
