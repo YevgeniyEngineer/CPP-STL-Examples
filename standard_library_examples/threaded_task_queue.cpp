@@ -30,6 +30,7 @@ class TaskDispatchQueue
   public:
     explicit TaskDispatchQueue(unsigned int num_threads = std::thread::hardware_concurrency())
     {
+        creation_time_ = std::chrono::steady_clock::now();
         for (unsigned int thread_no = 0; thread_no < num_threads; ++thread_no)
         {
             threads_.emplace_back([this] {
@@ -72,6 +73,8 @@ class TaskDispatchQueue
                 thread.join();
             }
         }
+        deletion_time_ = std::chrono::steady_clock::now();
+        std::cout << "Elapsed time: " << (deletion_time_ - creation_time_).count() / 1e9 << " seconds\n";
     };
 
     template <typename Predicate, typename... Args> void enqueue(Predicate &&func, Args &&...args)
@@ -88,6 +91,8 @@ class TaskDispatchQueue
     std::mutex mutex_;
     std::vector<std::thread> threads_;
     std::queue<std::function<void()>> tasks_;
+    std::chrono::time_point<std::chrono::steady_clock> creation_time_;
+    std::chrono::time_point<std::chrono::steady_clock> deletion_time_;
 };
 
 int main()
@@ -98,25 +103,21 @@ int main()
 
     auto task = [](const int task_no) {
         double sum = 0.0;
-        for (int i = 0; i < 100000000; ++i)
+        for (int i = 0; i < 1000; ++i)
         {
-            for (int j = 0; j < 100000000; ++j)
+            for (int j = 0; j < 1000; ++j)
             {
                 sum += std::sin(2 * i) + std::cos(3 * j);
-                sum *= std::abs(sum);
             }
         }
+        printf("Task %d completed with result %f\n", task_no, sum);
     };
 
     TaskDispatchQueue task_queue{};
-
-    std::chrono::time_point<std::chrono::high_resolution_clock> start_time = std::chrono::high_resolution_clock::now();
-    for (int task_no = 0; task_no < 1'000'000; task_no++)
+    for (int task_no = 0; task_no < 10000; ++task_no)
     {
         task_queue.enqueue(task, task_no);
     }
-    std::chrono::time_point<std::chrono::high_resolution_clock> stop_time = std::chrono::high_resolution_clock::now();
-    std::cout << "Elapsed time: " << (stop_time - start_time).count() / 1e9 << " seconds " << std::endl;
 
     return EXIT_SUCCESS;
 }
