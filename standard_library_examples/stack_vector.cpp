@@ -1,13 +1,15 @@
-#include <algorithm> // std::move_backward
-#include <array>     // std::array
-#include <cstddef>   // std::ptrdiff_t
-#include <cstdint>   // std::size_t
-#include <iostream>  // std::cout
-#include <iterator>  // std::reverse_iterator
-#include <stdexcept> // std::overflow_error, std::underflow_error
-#include <utility>   // std::move
+#include <algorithm>        // std::move_backward
+#include <array>            // std::array
+#include <cstddef>          // std::ptrdiff_t
+#include <cstdint>          // std::size_t
+#include <initializer_list> // std::initializer_list
+#include <iostream>         // std::cout
+#include <iterator>         // std::reverse_iterator
+#include <stdexcept>        // std::overflow_error, std::underflow_error
+#include <string_view>      // std::swap
+#include <utility>          // std::move
 
-template <typename T, std::size_t N> class StackVector
+template <typename T, std::size_t N> class StackVector final
 {
   public:
     using value_type = T;
@@ -22,8 +24,55 @@ template <typename T, std::size_t N> class StackVector
     using reverse_iterator = std::reverse_iterator<iterator>;
     using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
-    StackVector() : size_(0){};
+    StackVector() : size_(0)
+    {
+    }
+    StackVector(std::initializer_list<T> init)
+    {
+        if (init.size() > N)
+        {
+            throw std::overflow_error("Initializer list too large for StackVector");
+        }
+        size_ = init.size();
+        std::move(std::make_move_iterator(init.begin()), std::make_move_iterator(init.end()), data_.begin());
+    }
+    StackVector(const StackVector &other) : data_(other.data_), size_(other.size_)
+    {
+    }
+    StackVector &operator=(const StackVector &other)
+    {
+        if (this == &other)
+        {
+            return *this;
+        }
 
+        data_ = other.data_;
+        size_ = other.size_;
+
+        return *this;
+    }
+    StackVector(StackVector &&other) noexcept : data_(std::move(other.data_)), size_(other.size_)
+    {
+        other.size_ = 0;
+    }
+    StackVector &operator=(StackVector &&other) noexcept
+    {
+        if (this == &other)
+        {
+            return *this;
+        }
+
+        data_ = std::move(other.data_);
+        size_ = other.size_;
+        other.size_ = 0;
+
+        return *this;
+    }
+    void swap(StackVector &other) noexcept
+    {
+        data_.swap(other.data_);
+        std::swap(size_, other.size_);
+    }
     bool empty() const noexcept
     {
         return (size_ == 0UL);
@@ -203,6 +252,16 @@ int main()
 
     // Iterate over elements and print them
     for (const auto &val : vec)
+    {
+        std::cout << val << " ";
+    }
+    std::cout << std::endl;
+
+    // Create a StackVector using an initializer list
+    StackVector<int, 10> vec2 = {1, 2, 3, 4, 5};
+
+    // Iterate over elements and print them
+    for (const auto &val : vec2)
     {
         std::cout << val << " ";
     }
