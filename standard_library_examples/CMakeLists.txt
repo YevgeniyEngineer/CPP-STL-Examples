@@ -24,3 +24,4 @@ add_executable(producer_consumer producer_consumer.cpp)
 add_executable(multi_producer_multi_consumer multi_producer_multi_consumer.cpp)
 add_executable(stack_vector stack_vector.cpp)
 
+add_executable(custom_allocators custom_allocators.cpp)

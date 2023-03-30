@@ -5,6 +5,8 @@ project(opengl_examples)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED true)
 
+set(CMAKE_PREFIX_PATH "/usr/local")
+
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
 find_package(X11 REQUIRED)
