@@ -26,3 +26,4 @@ add_executable(stack_vector stack_vector.cpp)
 
 add_executable(custom_allocators custom_allocators.cpp)
 add_executable(threaded_priority_queue threaded_priority_queue.cpp)
+add_executable(event_driven_priority_queue event_driven_priority_queue.cpp)
