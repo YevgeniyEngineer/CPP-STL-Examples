@@ -22,7 +22,7 @@ class WorkStealingThreadPool
                 while (!done_.load())
                 {
                     std::function<void()> task;
-                    if (try_pop_task(task) || steal_task(task))
+                    if (tryPopTask(task) || stealTask(task))
                     {
                         task();
                     }
@@ -63,7 +63,7 @@ class WorkStealingThreadPool
     }
 
   private:
-    bool try_pop_task(std::function<void()> &task)
+    bool tryPopTask(std::function<void()> &task)
     {
         std::unique_lock<std::mutex> lock(queues_mutex_, std::try_to_lock);
         if (!lock)
@@ -83,7 +83,7 @@ class WorkStealingThreadPool
         return false;
     }
 
-    bool steal_task(std::function<void()> &task)
+    bool stealTask(std::function<void()> &task)
     {
         std::unique_lock<std::mutex> lock(queues_mutex_);
         for (auto it = queues_.rbegin(); it != queues_.rend(); ++it)
@@ -106,7 +106,7 @@ class WorkStealingThreadPool
 };
 
 template <typename InputIt, typename Func>
-void parallel_for_each(InputIt first, InputIt last, Func func, bool parallel = true)
+void parallelForEach(InputIt first, InputIt last, Func func, bool parallel = true)
 {
     if (parallel)
     {
