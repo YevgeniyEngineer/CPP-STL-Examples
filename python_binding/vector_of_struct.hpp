@@ -8,6 +8,7 @@ struct MyStruct
 {
     std::uint16_t x;
     long double y;
+    std::vector<float> vec;
 };
 
 std::vector<MyStruct> createStructVector(int size);

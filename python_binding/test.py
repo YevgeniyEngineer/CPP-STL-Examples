@@ -24,6 +24,7 @@ if __name__ == "__main__":
     # Modify values of a vector
     struct_vector[0].x = 10
     struct_vector[0].y = 15
+    struct_vector[0].vec = [0, 1, 2, 3, 4, 5]
 
     # Print modified vector
     vector_of_struct_py.printStructVector(struct_vector)
