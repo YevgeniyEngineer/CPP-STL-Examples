@@ -49,7 +49,7 @@ class WorkStealingThreadPool
         }
     }
 
-    template <typename F> void push_task(F &&task)
+    template <typename F> void pushTask(F &&task)
     {
         std::uint32_t current_thread_index = thread_index_++;
         if (thread_index_ >= threads_.size())
@@ -116,7 +116,7 @@ void parallelForEach(InputIt first, InputIt last, Func func, bool parallel = tru
         for (auto it = first; it != last; ++it)
         {
             futures.push_back(std::async(
-                std::launch::async, [&thread_pool, &func, it] { thread_pool.push_task([&func, it] { func(*it); }); }));
+                std::launch::async, [&thread_pool, &func, it] { thread_pool.pushTask([&func, it] { func(*it); }); }));
         }
 
         for (auto &future : futures)
@@ -148,11 +148,14 @@ int main()
 
     WorkStealingThreadPool thread_pool;
 
-    for (const auto &number : numbers)
+    for (int i = 0; i < 100000; ++i)
     {
-        auto task = std::make_shared<std::packaged_task<std::uint64_t()>>([number] { return factorial(number); });
-        results.push_back(task->get_future());
-        thread_pool.push_task([task] { (*task)(); });
+        for (const auto &number : numbers)
+        {
+            auto task = std::make_shared<std::packaged_task<std::uint64_t()>>([number] { return factorial(number); });
+            results.push_back(task->get_future());
+            thread_pool.pushTask([task] { (*task)(); });
+        }
     }
 
     for (std::uint32_t i = 0; i < results.size(); ++i)
