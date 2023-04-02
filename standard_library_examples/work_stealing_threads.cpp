@@ -141,14 +141,14 @@ std::uint64_t factorial(std::uint32_t n)
     return result;
 }
 
-int main()
+std::int32_t main(std::int32_t argc, const char **argv)
 {
     std::vector<std::uint32_t> numbers = {10, 5, 8, 12, 6};
     std::vector<std::future<std::uint64_t>> results;
 
     WorkStealingThreadPool thread_pool;
 
-    for (int i = 0; i < 100000; ++i)
+    for (std::int32_t i = 0; i < 100000; ++i)
     {
         for (const auto &number : numbers)
         {
