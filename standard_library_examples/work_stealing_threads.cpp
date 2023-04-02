@@ -4,6 +4,7 @@
 #include <functional> // std::function
 #include <future>     // std::async
 #include <iostream>   // std::cout
+#include <memory>     // std::shared_ptr
 #include <mutex>      // std::mutex, std::unique_lock
 #include <thread>     // std::thread
 #include <utility>    // std::move
